@@ -1,0 +1,30 @@
+Q: Why is JettyLauncher.java included in the project?
+A: It's an ugly workaround to get the project running in development mode together with Spring and Hibernate.
+
+See: http://code.google.com/p/google-web-toolkit/issues/detail?id=5693 for details.
+Below is an excerpt from the website.
+
+GWT Development Mode requires all JARs to be placed in WEB-INF/lib.
+It's especially painful when programmers use m2eclipse, which provides its own Eclipse classpath container.
+
+GWT version used: 2.0.4 (I guess that this issue is relevant in others as well)
+Operating systems: Windows, Linux; I guess that probably all
+
+This issue may be a duplicate of issue 5033, but I'm not sure, so I've made this one.
+
+Workaround for this issue we applied in our project:
+1) find source code of JettyContainer.java - it's already in gwt-dev.jar added by Eclipse GWT plugin to classpath
+2) copy the source of this class to your project's classpath to the same package (com.google.gwt.dev.shell.jetty)
+3) Open this copied Java file, find lines:
+
+    public WebAppClassLoaderExtension() throws IOException {
+        super(bootStrapOnlyClassLoader, WebAppContextWithReload.this);
+
+And below them add this:
+
+        URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+        for(URL url : loader.getURLs()) {
+        	addURL(url);
+        }
+
+Works, but it's only a workaround (quite ugly workaround). A better solution to this problem would be good.
