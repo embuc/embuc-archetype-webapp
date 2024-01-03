@@ -5,6 +5,12 @@ file).
 During development both project can be run in separate servers (embedded tomcat for boot and express for frontend) 
 independently.
 
+Note that nothing is created in Frontend yet, so you have to create your own project there for isntance:
+```bash
+npm create vite@latest frontend --template react
+```
+otherwise you will get error during build.
+
 # Frontend
 run frontend server (from frontend folder):
 ### `npm run dev`
