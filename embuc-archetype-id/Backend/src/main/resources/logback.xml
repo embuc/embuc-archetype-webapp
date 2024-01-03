@@ -1,0 +1,24 @@
+<configuration scan="true" scanPeriod="60 seconds">
+
+    <appender name="GLOBAL_LOG_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/var/log/your-app/backend.log</file>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <charset>UTF-8</charset>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>%-25(%d) |%level| [%thread] |%logger{32}| - %msg %n</pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-25(%d) |%level| [%thread] |%logger{32}| - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="GLOBAL_LOG_FILE" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

@@ -1,218 +1,61 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>embuc-archetype-id</artifactId>
-    <groupId>se.embuc.groupId</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-    <relativePath>..</relativePath>
-  </parent>
-  <artifactId>Frontend</artifactId>
-  <packaging>war</packaging>
-  <properties>
-		<!-- Display name for the web application -->
-		<display-name>${project.build.finalName}-${project.version}-b.${BUILD_NUMBER}-r${SVN_REVISION}</display-name>
-		<gwtp.version>0.7</gwtp.version>
-	</properties>
-	<dependencies>
-		<!-- GWT -->
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-servlet</artifactId>
-			<version>${gwt.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- gwt-dev is only needed for the JettyLauncher.java-hack, when running 
-			the app locally. -->
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-dev</artifactId>
-			<version>${gwt.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<version>${gwt.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt.inject</groupId>
-			<artifactId>gin</artifactId>
-			<version>1.5.0</version>
-			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>gwt-servlet</artifactId>
-					<groupId>com.google.gwt</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- GWTP -->
-		<!-- Annotation component -->
-		<dependency>
-			<groupId>com.gwtplatform</groupId>
-			<artifactId>gwtp-processors</artifactId>
-			<version>${gwtp.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- Crawler component -->
-		<dependency>
-			<groupId>com.gwtplatform</groupId>
-			<artifactId>gwtp-crawler</artifactId>
-			<version>${gwtp.version}</version>
-		</dependency>
-		<!-- MVP component -->
-		<dependency>
-			<groupId>com.gwtplatform</groupId>
-			<artifactId>gwtp-mvp-client</artifactId>
-			<version>${gwtp.version}</version>
-			<scope>provided</scope>
-		</dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>embuc-archetype-id</artifactId>
+        <groupId>se.embuc.groupId</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <artifactId>Frontend</artifactId>
+	<description>Frontend with React/Angular/Vue/VanillaJS</description>
 
-		<dependency>
-			<groupId>com.gwtplatform</groupId>
-			<!-- <artifactId>gwtp-dispatch-server-guice</artifactId> -->
-			<!-- Or, if you use spring: -->
-			<artifactId>gwtp-dispatch-server-spring</artifactId> 
-			<!-- For GWTP 0.5.1 and earlier: <artifactId>gwtp-dispatch-server</artifactId> -->
-			<version>${gwtp.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>spring-beans</artifactId>
-					<groupId>org.springframework</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>spring-context</artifactId>
-					<groupId>org.springframework</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+    <build>
+        <finalName>Frontend</finalName>
+        <resources>
+            <resource>
+                <directory>build</directory>
+            </resource>
+        </resources>
 
-		<!-- Dispatch component -->
-		<dependency>
-			<groupId>com.gwtplatform</groupId>
-			<artifactId>gwtp-dispatch-client</artifactId>
-			<version>${gwtp.version}</version>
-			<scope>provided</scope> <!-- Remove for GWTP 0.5.1 and earlier -->
-		</dependency>
-		
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>
-	
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-	<build>
-		<finalName>Frontend</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<version>${gwt.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<webappDirectory>src/main/webapp</webappDirectory>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
-					<useCache>false</useCache>
-					<classifier>prod</classifier>
-					<webappDirectory>${project.build.directory}/${project.build.finalName}-prod</webappDirectory>
-					<webResources>
-						<resource>
-							<directory>src/env/prod</directory>
-						</resource>
-					</webResources>
-				</configuration>
-				<executions>
-					<execution>
-						<id>package-dev</id>
-						<phase>package</phase>
-						<configuration>
-							<classifier>dev</classifier>
-							<webappDirectory>${project.build.directory}/${project.build.finalName}-dev</webappDirectory>
-							<webResources>
-								<resource>
-									<directory>src/env/dev</directory>
-								</resource>
-							</webResources>
-						</configuration>
-						<goals>
-							<goal>war</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>package-stg</id>
-						<phase>package</phase>
-						<configuration>
-							<classifier>stg</classifier>
-							<webappDirectory>${project.build.directory}/${project.build.finalName}-stg</webappDirectory>
-							<webResources>
-								<resource>
-									<directory>src/env/stg</directory>
-								</resource>
-							</webResources>
-						</configuration>
-						<goals>
-							<goal>war</goal>
-						</goals>
-					</execution>					
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<!-- Elicpse's GWT plugin need these resource folders as source folders -->
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>src/main/ui</source>
-							</sources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>add-resource</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>add-resource</goal>
-						</goals>
-						<configuration>
-							<resources>
-								<resource>
-									<directory>src/main/ui</directory>
-									<excludes>
-										<exclude>**/client/**</exclude>
-									</excludes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <nodeVersion>${node.version}</nodeVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
